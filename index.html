@@ -2,40 +2,25 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AR & IoT na Educação</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
 
-  :root {
-    --blue:    #000080;
-    --red:     #CC0000;
-    --green:   #008000;
-    --orange:  #FF8C00;
-    --purple:  #6A0DAD;
-    --yellow:  #FFD700;
-    --fs-title: clamp(1.4em, 5vw, 2.2em);
-    --fs-head:  clamp(1em, 3.5vw, 1.6em);
-    --fs-body:  clamp(0.78em, 2.2vw, 1em);
-    --fs-small: clamp(0.68em, 1.8vw, 0.88em);
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
+  body {
     font-family: 'Comic Neue', 'Comic Sans MS', cursive;
-    background: var(--blue);
-    touch-action: none;
+    background: #000080;
+    overflow: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ctext y='16' font-size='16'%3E⭐%3C/text%3E%3C/svg%3E"), auto;
   }
 
-  /* ===== SLIDESHOW ===== */
+  /* ===== SLIDESHOW CONTAINER ===== */
   #slideshow {
     width: 100vw;
     height: 100vh;
     position: relative;
-    overflow: hidden;
   }
 
   .slide {
@@ -44,449 +29,585 @@
     height: 100%;
     position: absolute;
     top: 0; left: 0;
-    flex-direction: column;
-    animation: fadeIn 0.3s ease;
+    animation: slideIn 0.4s ease;
   }
   .slide.active { display: flex; }
 
-  @keyframes fadeIn {
+  @keyframes slideIn {
     from { opacity: 0; transform: scale(0.97); }
     to   { opacity: 1; transform: scale(1); }
   }
 
-  /* ===== RAINBOW BAR ===== */
-  .rainbow-bar {
-    height: clamp(6px, 1.5vw, 12px);
-    flex-shrink: 0;
-    background: repeating-linear-gradient(90deg,
-      #FF0000 0,#FF0000 14.28%,
-      #FF8C00 14.28%,#FF8C00 28.56%,
-      #FFD700 28.56%,#FFD700 42.84%,
-      #00AA00 42.84%,#00AA00 57.12%,
-      #0000FF 57.12%,#0000FF 71.4%,
-      #8B00FF 71.4%,#8B00FF 85.68%,
-      #FF1493 85.68%,#FF1493 100%);
-  }
-
-  /* ===== TICKER ===== */
-  .ticker-wrap {
-    flex-shrink: 0;
-    height: clamp(28px, 5vw, 38px);
-    background: var(--blue);
-    border-top: 2px solid var(--yellow);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-  }
-  .ticker {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    animation: marquee 20s linear infinite;
-    font-weight: 700;
-    color: var(--yellow);
-    font-size: clamp(11px, 2.5vw, 15px);
-    gap: 24px;
-    padding: 0 20px;
-  }
-  @keyframes marquee { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
-
-  /* ===== SLIDE HEADER ===== */
-  .slide-header {
-    flex-shrink: 0;
-    padding: clamp(6px, 2vw, 12px) clamp(10px, 3vw, 20px);
-    color: white;
-    font-family: 'Fredoka One', cursive;
-    font-size: var(--fs-head);
-    text-shadow: 2px 2px 0 #000;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 3px solid var(--yellow);
-  }
-
-  /* ===== SLIDE CONTENT AREA ===== */
-  .slide-body {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    padding: clamp(8px, 2vw, 16px) clamp(10px, 3vw, 24px);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(8px, 1.8vw, 14px);
-  }
-
   /* ===== NAVIGATION ===== */
-  .nav-bar {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: clamp(72px, 11vw, 90px);
-    background: var(--blue);
-    border-top: 10px solid var(--yellow);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 clamp(8px, 3vw, 16px);
-    z-index: 9999;
-    gap: 8px;
-  }
   .nav-btn {
-    background: linear-gradient(135deg, var(--yellow), #FF8C00);
+    position: fixed;
+    bottom: 18px;
+    z-index: 9999;
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
     border: 3px solid #8B0000;
     border-radius: 8px;
-    padding: clamp(6px, 2vw, 10px) clamp(12px, 4vw, 22px);
+    padding: 8px 22px;
     font-family: 'Comic Neue', cursive;
     font-weight: 700;
-    font-size: clamp(14px, 3.5vw, 19px);
+    font-size: 18px;
     cursor: pointer;
     box-shadow: 3px 3px 0 #8B0000;
-    text-shadow: 1px 1px 0 #fff;
     transition: transform 0.1s;
-    white-space: nowrap;
-    min-width: clamp(80px, 20vw, 130px);
-    text-align: center;
+    text-shadow: 1px 1px 0 #fff;
   }
-  .nav-btn:active { transform: scale(0.94) translate(2px,2px); box-shadow: 1px 1px 0 #8B0000; }
+  .nav-btn:hover { transform: scale(1.08); }
+  .nav-btn:active { transform: scale(0.96) translate(2px,2px); box-shadow: 1px 1px 0 #8B0000; }
+  #btn-prev { left: 20px; }
+  #btn-next { right: 20px; }
   #slide-counter {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: 'Comic Neue', cursive;
     font-weight: 700;
-    font-size: clamp(13px, 3vw, 16px);
-    color: var(--yellow);
+    font-size: 15px;
+    color: #FFD700;
     text-shadow: 1px 1px 2px #000;
-    text-align: center;
-    flex: 1;
+    z-index: 9999;
   }
-
-  /* Bottom padding so content doesn't hide behind nav */
-  .slide-body { padding-bottom: clamp(80px, 12vw, 100px); }
-
-  /* ===== SHARED CARD STYLES ===== */
-  .card {
-    background: white;
-    border: 2px solid;
-    border-radius: 6px;
-    box-shadow: 3px 3px 0;
-    padding: clamp(8px, 2vw, 14px);
-  }
-  .card-left-border {
-    background: white;
-    border: 2px solid #ddd;
-    border-left: 7px solid;
-    border-radius: 4px;
-    padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px);
-    box-shadow: 2px 2px 0 #ccc;
-  }
-  .highlight-box {
-    border-radius: 4px;
-    padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: var(--fs-body);
-    font-weight: 700;
-  }
-  .highlight-box .hico { font-size: clamp(1.3em, 4vw, 1.8em); flex-shrink: 0; margin-top: 2px; }
-
-  /* ===== GRIDS ===== */
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(8px, 2vw, 14px);
-    align-items: start;
-  }
-  .grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(6px, 1.5vw, 12px);
-    align-items: start;
-  }
-  @media (max-width: 540px) {
-    .grid-2 { grid-template-columns: 1fr; }
-    .grid-4 { grid-template-columns: 1fr 1fr; }
-  }
-
-  /* ===== TYPOGRAPHY ===== */
-  .t-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: var(--fs-title);
-    line-height: 1.15;
-  }
-  .t-head  { font-family: 'Fredoka One', cursive; font-size: clamp(0.95em, 2.8vw, 1.2em); }
-  .t-body  { font-size: var(--fs-body); line-height: 1.45; }
-  .t-small { font-size: var(--fs-small); color: #444; line-height: 1.35; }
 
   /* ===== ANIMATIONS ===== */
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  @keyframes spin    { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-  @keyframes float   { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-8px) rotate(3deg)} }
-  @keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0} }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  @keyframes wave { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
+  @keyframes marquee { from{transform:translateX(100%)} to{transform:translateX(-100%)} }
   @keyframes rainbow {
     0%{color:#FF0000} 16%{color:#FF8C00} 33%{color:#FFD700}
     50%{color:#00AA00} 66%{color:#0000FF} 83%{color:#8B00FF} 100%{color:#FF0000}
   }
-  @keyframes starSpin { 0%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.3)} 100%{transform:rotate(360deg) scale(1)} }
-  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.07)} }
-
-  .bounce { animation: bounce 1.2s infinite; display: inline-block; }
-  .spin   { animation: spin 3s linear infinite; display: inline-block; }
-  .float  { animation: float 3s ease-in-out infinite; display: inline-block; }
-  .blink  { animation: blink 1s infinite; }
-  .rainbow-text { animation: rainbow 2s linear infinite; }
-  .pulse  { animation: pulse 1.5s infinite; display: inline-block; }
-
-  /* ===== STAR DECORATION ===== */
-  .stars-bg {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none; overflow: hidden; z-index: 0;
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+  @keyndef shake {
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}
   }
-  .star-item {
+  @keyframes float { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-10px) rotate(3deg)} }
+  @keyframes glow {
+    0%,100%{text-shadow:0 0 8px #FFD700,0 0 20px #FFD700}
+    50%{text-shadow:0 0 20px #FFD700,0 0 40px #FF8C00,0 0 60px #FF0000}
+  }
+  @keyframes starSpin {
+    0%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.3)} 100%{transform:rotate(360deg) scale(1)}
+  }
+
+  .blink { animation: blink 1s infinite; }
+  .bounce { animation: bounce 1.2s infinite; display: inline-block; }
+  .spin { animation: spin 3s linear infinite; display: inline-block; }
+  .wave { animation: wave 1s infinite; display: inline-block; }
+  .rainbow { animation: rainbow 2s linear infinite; }
+  .pulse { animation: pulse 1.5s infinite; }
+  .float { animation: float 3s ease-in-out infinite; }
+  .glow { animation: glow 2s ease-in-out infinite; }
+
+  /* ===== SHARED COMPONENTS ===== */
+  .ticker-wrap {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #000080;
+    border-top: 3px solid #FFD700;
+    height: 38px;
+    overflow: hidden;
+  }
+  .ticker {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    white-space: nowrap;
+    animation: marquee 18s linear infinite;
+    font-weight: 700;
+    color: #FFD700;
+    font-size: 16px;
+    text-shadow: 1px 1px 0 #000;
+    gap: 30px;
+  }
+
+  .af-border {
+    border: 4px solid;
+    border-image: repeating-linear-gradient(90deg,#FF0000,#FFD700,#00AA00,#0000FF,#8B00FF) 1;
+    padding: 6px;
+  }
+
+  .card-af {
+    background: white;
+    border: 3px solid #000080;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 #000080;
+    padding: 10px 14px;
+  }
+
+  .title-banner {
+    background: linear-gradient(90deg, #000080, #0000CD, #000080);
+    border-top: 4px solid #FFD700;
+    border-bottom: 4px solid #FFD700;
+    text-align: center;
+    padding: 8px 0;
+    color: #FFD700;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 1px 1px 2px #000;
+  }
+
+  /* ===== GIF DECORATIONS (emoji substitutes) ===== */
+  .gif-deco {
+    font-size: 2.2em;
+    line-height: 1;
+    display: inline-block;
+  }
+
+  /* ===== STAR DECORATIONS ===== */
+  .stars-container {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .star {
     position: absolute;
     animation: starSpin 2s linear infinite;
+    font-size: 1.4em;
+    opacity: 0.7;
   }
 
-  /* ============================================
+  /* ==========================================
      SLIDE 1 — CAPA
-  ============================================ */
-  #s1 {
+  ========================================== */
+  #slide-1 {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23000080'/%3E%3Cpath d='M0 20h40M20 0v40' stroke='%230000CD' stroke-width='1' opacity='0.3'/%3E%3C/svg%3E");
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
   }
-  #s1 .center-area {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
-    padding: clamp(10px, 3vw, 20px);
+  #slide-1 .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 12px;
+    background: repeating-linear-gradient(90deg, #FF0000 0px, #FF0000 20px, #FF8C00 20px, #FF8C00 40px, #FFD700 40px, #FFD700 60px, #00AA00 60px, #00AA00 80px, #0000FF 80px, #0000FF 100px, #8B00FF 100px, #8B00FF 120px);
   }
-  #s1 .main-box {
+  #slide-1 .bottom-bar {
+    position: absolute;
+    bottom: 38px; left: 0; right: 0;
+    height: 12px;
+    background: repeating-linear-gradient(90deg, #8B00FF 0px, #8B00FF 20px, #0000FF 20px, #0000FF 40px, #00AA00 40px, #00AA00 60px, #FFD700 60px, #FFD700 80px, #FF8C00 80px, #FF8C00 100px, #FF0000 100px, #FF0000 120px);
+  }
+  #slide-1 .main-box {
     background: white;
-    border: 4px solid var(--yellow);
-    box-shadow: 6px 6px 0 #FF0000, 10px 10px 0 #0000FF;
+    border: 5px solid #FFD700;
+    box-shadow: 8px 8px 0 #FF0000, 12px 12px 0 #0000FF;
     border-radius: 6px;
-    padding: clamp(16px, 4vw, 30px) clamp(16px, 5vw, 40px);
+    padding: 24px 40px;
     text-align: center;
-    max-width: min(680px, 95vw);
-    width: 100%;
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
   }
-  #s1 .materia-tag {
-    background: var(--blue);
-    color: var(--yellow);
-    font-size: clamp(10px, 2.2vw, 13px);
+  #slide-1 .materia-tag {
+    background: #000080;
+    color: #FFD700;
+    font-size: 13px;
     font-weight: 700;
-    padding: 4px clamp(10px, 3vw, 18px);
+    padding: 4px 16px;
     border-radius: 20px;
     display: inline-block;
-    margin-bottom: clamp(8px, 2vw, 14px);
-    border: 2px solid var(--yellow);
-    letter-spacing: 1px;
+    margin-bottom: 12px;
+    border: 2px solid #FFD700;
+    letter-spacing: 2px;
   }
-  #s1 .gifs-row {
+  #slide-1 h1 {
+    font-family: 'Fredoka One', 'Comic Neue', cursive;
+    font-size: 3.4em;
+    line-height: 1.1;
+    text-shadow: 3px 3px 0 #000080, 5px 5px 0 rgba(0,0,128,0.3);
+  }
+  #slide-1 .subtitle {
+    font-size: 1.1em;
+    color: #555;
+    margin-top: 8px;
+  }
+  #slide-1 .gifs-row {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: clamp(8px, 2.5vw, 18px);
-    margin-top: clamp(10px, 2.5vw, 16px);
-    font-size: clamp(1.5em, 5vw, 2.4em);
+    gap: 18px;
+    margin-top: 14px;
+    font-size: 2.4em;
   }
 
-  /* ============================================
+  /* ==========================================
      SLIDE 2 — ROTEIRO
-  ============================================ */
-  #s2 { background: #FFFDE7; }
-  #s2 .slide-header { background: linear-gradient(90deg,#FF0000,#FF8C00,#FFD700,#00AA00,#0000FF,#8B00FF); }
-  #s2 .topic-card {
+  ========================================== */
+  #slide-2 {
+    background: #FFFDE7;
+    flex-direction: column;
+  }
+  #slide-2 .slide-header {
+    background: linear-gradient(90deg, #FF0000, #FF8C00, #FFD700, #00AA00, #0000FF, #8B00FF);
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.2em;
+    text-shadow: 2px 2px 0 #000;
+  }
+  #slide-2 .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 16px 30px;
+    flex: 1;
+  }
+  #slide-2 .topic-card {
     background: white;
-    border-left: 7px solid;
-    border-top: 2px solid #ddd;
-    border-right: 2px solid #ddd;
-    border-bottom: 2px solid #ddd;
+    border-left: 8px solid;
+    border-top: 3px solid #ddd;
+    border-right: 3px solid #ddd;
+    border-bottom: 3px solid #ddd;
     border-radius: 4px;
-    box-shadow: 2px 2px 0 #ccc;
+    box-shadow: 3px 3px 0 #ccc;
     display: flex;
     align-items: center;
-    gap: clamp(8px, 2vw, 14px);
-    padding: clamp(8px, 2vw, 14px);
-    font-size: var(--fs-body);
+    gap: 14px;
+    padding: 12px 16px;
+    font-size: 1.05em;
     font-weight: 700;
   }
-  #s2 .num-badge {
-    width: clamp(34px, 6vw, 44px);
-    height: clamp(34px, 6vw, 44px);
+  #slide-2 .num-badge {
+    width: 44px; height: 44px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Fredoka One', cursive;
-    font-size: clamp(1em, 3vw, 1.4em);
+    font-size: 1.4em;
     color: white;
     flex-shrink: 0;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
   }
-  #s2 .topic-icon { font-size: clamp(1.2em, 3.5vw, 1.6em); }
+  #slide-2 .topic-icon { font-size: 1.6em; }
 
-  /* ============================================
+  /* ==========================================
      SLIDE 3 — O QUE É AR
-  ============================================ */
-  #s3 { background: #E3F2FD; }
-  #s3 .slide-header { background: linear-gradient(90deg,#0000CD,#1565C0); }
-  #s3 .step {
-    display: flex; align-items: center; gap: 8px;
-    font-size: var(--fs-body); font-weight: 700;
-    margin-bottom: 6px;
+  ========================================== */
+  #slide-3 {
+    background: #E3F2FD;
+    flex-direction: column;
   }
-  #s3 .step-num {
-    width: clamp(22px, 4vw, 28px);
-    height: clamp(22px, 4vw, 28px);
-    border-radius: 50%;
+  #slide-3 .slide-header {
+    background: linear-gradient(90deg, #0000CD, #1565C0);
+    padding: 10px 20px;
+    color: #FFD700;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    text-shadow: 2px 2px 0 #000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 4px solid #FFD700;
+  }
+  #slide-3 .content {
+    display: flex;
+    flex: 1;
+    gap: 16px;
+    padding: 16px 24px;
+  }
+  #slide-3 .left-col { flex: 1.1; display: flex; flex-direction: column; gap: 14px; }
+  #slide-3 .right-col { width: 260px; display: flex; flex-direction: column; gap: 14px; }
+  #slide-3 .def-box {
+    background: white;
+    border: 3px solid #0000CD;
+    border-radius: 6px;
+    padding: 14px;
+    box-shadow: 4px 4px 0 #0000CD;
+    font-size: 0.98em;
+    line-height: 1.5;
+  }
+  #slide-3 .def-box strong { color: #0000CD; font-size: 1.05em; }
+  #slide-3 .steps-box {
+    background: #FFF9C4;
+    border: 3px solid #FF8C00;
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 3px 3px 0 #FF8C00;
+  }
+  #slide-3 .steps-box h3 { color: #FF8C00; font-family: 'Fredoka One', cursive; margin-bottom: 8px; font-size: 1.1em; }
+  #slide-3 .step { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.92em; font-weight: 700; }
+  #slide-3 .step-num {
+    width: 26px; height: 26px; border-radius: 50%;
     background: #FF8C00; color: white;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: clamp(0.75em, 2vw, 0.9em);
-    flex-shrink: 0;
+    font-weight: 700; font-size: 0.9em; flex-shrink: 0;
   }
-  #s3 .mini-cards { display: flex; gap: clamp(6px, 1.5vw, 12px); }
-  #s3 .mini-card {
-    flex: 1;
+  #slide-3 .mini-card {
     background: white;
-    border: 2px solid;
+    border: 3px solid;
     border-radius: 6px;
-    padding: clamp(8px, 2vw, 12px) 8px;
+    padding: 10px 12px;
     box-shadow: 3px 3px 0;
     text-align: center;
-    font-size: var(--fs-small);
+    font-size: 0.88em;
     font-weight: 700;
   }
-  #s3 .mini-card .mico { font-size: clamp(1.4em, 4vw, 2em); display: block; margin-bottom: 4px; }
+  #slide-3 .mini-card .icon { font-size: 2em; display: block; margin-bottom: 4px; }
 
-  /* ============================================
+  /* ==========================================
      SLIDE 4 — AR NA QUÍMICA
-  ============================================ */
-  #s4 { background: #F3E5F5; }
-  #s4 .slide-header { background: linear-gradient(90deg,#6A1B9A,#8B00FF); }
-  #s4 .app-card {
-    background: white;
-    border: 2px solid;
-    border-radius: 6px;
-    box-shadow: 3px 3px 0;
-    padding: clamp(8px, 2vw, 12px);
-    display: flex; align-items: flex-start; gap: 10px;
-    align-self: start;
+  ========================================== */
+  #slide-4 {
+    background: #F3E5F5;
+    flex-direction: column;
   }
-  #s4 .app-card .aico { font-size: clamp(1.5em, 4.5vw, 2.2em); flex-shrink: 0; }
-
-  /* ============================================
-     SLIDE 5 — O QUE É IoT
-  ============================================ */
-  #s5 { background: #FCE4EC; }
-  #s5 .slide-header { background: linear-gradient(90deg,#B71C1C,#D32F2F); }
-  #s5 .pillar {
-    background: white;
-    border: 2px solid;
-    border-radius: 6px;
-    box-shadow: 3px 3px 0;
-    padding: clamp(8px, 2vw, 14px) 8px;
-    text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    align-self: start;
+  #slide-4 .slide-header {
+    background: linear-gradient(90deg, #6A1B9A, #8B00FF);
+    padding: 10px 20px;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    text-shadow: 2px 2px 0 #000;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 4px solid #FFD700;
   }
-  #s5 .pillar .pico { font-size: clamp(1.6em, 5vw, 2.4em); }
-
-  /* ============================================
-     SLIDE 6 — IoT NA EDUCAÇÃO
-  ============================================ */
-  #s6 { background: #E8F5E9; }
-  #s6 .slide-header { background: linear-gradient(90deg,#1B5E20,#2E7D32); }
-  #s6 .app-card {
+  #slide-4 .content { flex: 1; padding: 14px 24px; display: flex; flex-direction: column; gap: 12px; }
+  #slide-4 .problem-box {
+    background: #FFF9C4;
+    border: 3px solid #FF8C00;
+    border-left: 8px solid #FF8C00;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 0.95em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #slide-4 .apps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; }
+  #slide-4 .app-card {
     background: white;
-    border: 2px solid;
+    border: 3px solid;
     border-radius: 6px;
-    box-shadow: 3px 3px 0;
-    padding: clamp(8px, 2vw, 14px);
+    box-shadow: 4px 4px 0;
+    padding: 12px;
     display: flex; align-items: flex-start; gap: 12px;
   }
-  #s6 .app-card .aico { font-size: clamp(1.6em, 5vw, 2.4em); flex-shrink: 0; }
-
-  /* ============================================
-     SLIDE 7 — BENEFÍCIOS & DESAFIOS
-  ============================================ */
-  #s7 { background: #FFFDE7; }
-  #s7 .slide-header { background: linear-gradient(90deg,#E65100,#FF8C00); }
-  #s7 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; flex: 1; }
-  @media (max-width: 480px) { #s7 .two-col { grid-template-columns: 1fr; } }
-  #s7 .col { padding: clamp(6px, 1.5vw, 12px) clamp(8px, 2vw, 16px); display: flex; flex-direction: column; gap: 6px; }
-  #s7 .col-header {
-    text-align: center; font-family: 'Fredoka One', cursive;
-    font-size: clamp(0.95em, 3vw, 1.3em);
-    padding: 7px; border-radius: 4px; color: white;
-    text-shadow: 1px 1px 0 #000; margin-bottom: 2px;
-  }
-  #s7 .item {
-    background: white; border-radius: 4px;
-    padding: clamp(5px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
-    font-size: clamp(0.75em, 2.2vw, 0.9em);
-    font-weight: 700;
-    display: flex; align-items: center; gap: 8px;
-    border: 2px solid; box-shadow: 2px 2px 0;
-  }
-  #s7 .item .ico { font-size: clamp(1em, 3vw, 1.3em); flex-shrink: 0; }
-
-  /* ============================================
-     SLIDE 8 — CONEXÃO COM A EMENTA
-  ============================================ */
-  #s8 { background: #E8EAF6; }
-  #s8 .slide-header { background: linear-gradient(90deg,#283593,#3949AB); color: var(--yellow); }
-  #s8 .link-row {
-    background: white;
-    border-left: 7px solid;
+  #slide-4 .app-card .app-icon { font-size: 2.2em; flex-shrink: 0; }
+  #slide-4 .app-card h4 { font-family: 'Fredoka One', cursive; font-size: 1.1em; margin-bottom: 4px; }
+  #slide-4 .app-card p { font-size: 0.88em; color: #444; line-height: 1.4; }
+  #slide-4 .result-box {
+    background: #E8F5E9;
+    border: 3px solid #00AA00;
     border-radius: 4px;
-    padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 14px);
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: 2px 2px 0 #ccc;
-    font-size: var(--fs-body);
+    padding: 10px 16px;
+    font-size: 0.92em;
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700;
   }
-  #s8 .link-row .lico { font-size: clamp(1.2em, 3.5vw, 1.8em); flex-shrink: 0; }
 
-  /* ============================================
+  /* ==========================================
+     SLIDE 5 — O QUE É IoT
+  ========================================== */
+  #slide-5 {
+    background: #FCE4EC;
+    flex-direction: column;
+  }
+  #slide-5 .slide-header {
+    background: linear-gradient(90deg, #B71C1C, #D32F2F);
+    padding: 10px 20px;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    text-shadow: 2px 2px 0 #000;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 4px solid #FFD700;
+  }
+  #slide-5 .content { flex: 1; padding: 14px 24px; display: flex; flex-direction: column; gap: 12px; }
+  #slide-5 .def-box {
+    background: white;
+    border: 3px solid #B71C1C;
+    border-left: 8px solid #B71C1C;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 0.96em;
+    line-height: 1.5;
+    box-shadow: 3px 3px 0 #B71C1C;
+  }
+  #slide-5 .def-box strong { color: #B71C1C; }
+  #slide-5 .origin-box {
+    background: #FFF9C4;
+    border: 2px dashed #FF8C00;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #slide-5 .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 1; }
+  #slide-5 .pillar {
+    background: white;
+    border: 3px solid;
+    border-radius: 6px;
+    box-shadow: 4px 4px 0;
+    padding: 14px 10px;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  #slide-5 .pillar .icon { font-size: 2.4em; }
+  #slide-5 .pillar h4 { font-family: 'Fredoka One', cursive; font-size: 1em; }
+  #slide-5 .pillar p { font-size: 0.82em; color: #555; line-height: 1.3; }
+  #slide-5 .examples-box {
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    text-align: center;
+    display: flex; align-items: center; gap: 8px; justify-content: center;
+  }
+
+  /* ==========================================
+     SLIDE 6 — IoT NA EDUCAÇÃO
+  ========================================== */
+  #slide-6 {
+    background: #E8F5E9;
+    flex-direction: column;
+  }
+  #slide-6 .slide-header {
+    background: linear-gradient(90deg, #1B5E20, #2E7D32);
+    padding: 10px 20px;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    text-shadow: 2px 2px 0 #000;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 4px solid #FFD700;
+  }
+  #slide-6 .content { flex: 1; padding: 14px 24px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 14px; }
+  #slide-6 .app-card {
+    background: white;
+    border: 3px solid;
+    border-radius: 6px;
+    box-shadow: 4px 4px 0;
+    padding: 14px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  #slide-6 .app-card .icon { font-size: 2.4em; flex-shrink: 0; }
+  #slide-6 .app-card h4 { font-family: 'Fredoka One', cursive; font-size: 1.1em; margin-bottom: 4px; }
+  #slide-6 .app-card p { font-size: 0.88em; color: #444; line-height: 1.4; }
+
+  /* ==========================================
+     SLIDE 7 — BENEFÍCIOS & DESAFIOS
+  ========================================== */
+  #slide-7 {
+    background: #FFFDE7;
+    flex-direction: column;
+  }
+  #slide-7 .slide-header {
+    background: linear-gradient(90deg, #F57F17, #FF8C00);
+    padding: 10px 20px;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    text-shadow: 2px 2px 0 #000;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 4px solid #0000CD;
+  }
+  #slide-7 .content { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  #slide-7 .col { padding: 14px 20px; display: flex; flex-direction: column; gap: 8px; }
+  #slide-7 .col-header {
+    text-align: center; font-family: 'Fredoka One', cursive; font-size: 1.4em;
+    padding: 8px; border-radius: 4px; color: white; text-shadow: 1px 1px 0 #000;
+    margin-bottom: 4px;
+  }
+  #slide-7 .item {
+    background: white;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    font-weight: 700;
+    display: flex; align-items: center; gap: 10px;
+    border: 2px solid;
+    box-shadow: 2px 2px 0;
+  }
+  #slide-7 .item .ico { font-size: 1.3em; flex-shrink: 0; }
+
+  /* ==========================================
+     SLIDE 8 — CONEXÃO COM A EMENTA
+  ========================================== */
+  #slide-8 {
+    background: #E8EAF6;
+    flex-direction: column;
+  }
+  #slide-8 .slide-header {
+    background: linear-gradient(90deg, #283593, #3949AB);
+    padding: 10px 20px;
+    color: #FFD700;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.85em;
+    text-shadow: 2px 2px 0 #000;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 4px solid #FFD700;
+  }
+  #slide-8 .content { flex: 1; padding: 12px 24px; display: flex; flex-direction: column; gap: 10px; }
+  #slide-8 .link-row {
+    background: white;
+    border-left: 8px solid;
+    border-radius: 4px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: 2px 2px 0 #ccc;
+    font-size: 0.92em;
+  }
+  #slide-8 .link-row .icon { font-size: 1.8em; flex-shrink: 0; }
+  #slide-8 .link-row strong { display: block; font-size: 1em; margin-bottom: 2px; }
+  #slide-8 .link-row span { color: #555; font-size: 0.92em; }
+
+  /* ==========================================
      SLIDE 9 — CONCLUSÃO
-  ============================================ */
-  #s9 {
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23000080'/%3E%3Cpath d='M0 20h40M20 0v40' stroke='%230000CD' stroke-width='1' opacity='0.3'/%3E%3C/svg%3E");
-    justify-content: space-between;
+  ========================================== */
+  #slide-9 {
+    background: #000080;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
   }
-  #s9 .center-area {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: clamp(10px, 3vw, 20px); z-index: 1;
+  #slide-9 .top-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 12px;
+    background: repeating-linear-gradient(90deg, #FF0000 0,#FF0000 20px,#FF8C00 20px,#FF8C00 40px,#FFD700 40px,#FFD700 60px,#00AA00 60px,#00AA00 80px,#0000FF 80px,#0000FF 100px,#8B00FF 100px,#8B00FF 120px);
   }
-  #s9 .main-box {
+  #slide-9 .bottom-bar {
+    position: absolute; bottom: 38px; left: 0; right: 0; height: 12px;
+    background: repeating-linear-gradient(90deg, #8B00FF 0,#8B00FF 20px,#0000FF 20px,#0000FF 40px,#00AA00 40px,#00AA00 60px,#FFD700 60px,#FFD700 80px,#FF8C00 80px,#FF8C00 100px,#FF0000 100px,#FF0000 120px);
+  }
+  #slide-9 .main-box {
     background: white;
-    border: 4px solid var(--yellow);
-    box-shadow: 6px 6px 0 #FF0000, 10px 10px 0 #0000FF;
+    border: 5px solid #FFD700;
+    box-shadow: 8px 8px 0 #FF0000, 12px 12px 0 #0000FF;
     border-radius: 6px;
-    padding: clamp(16px, 4vw, 28px) clamp(16px, 5vw, 36px);
+    padding: 28px 40px;
     text-align: center;
-    max-width: min(750px, 96vw);
-    width: 100%;
+    position: relative; z-index: 2;
+    max-width: 780px; width: 90%;
   }
-  #s9 .point {
-    display: flex; align-items: center; gap: 10px;
+  #slide-9 h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.6em;
+    animation: rainbow 2s linear infinite;
+    margin-bottom: 18px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  }
+  #slide-9 .point {
+    display: flex; align-items: center; gap: 12px;
     background: #f5f5ff;
     border: 2px solid #0000CD;
     border-radius: 4px;
-    padding: clamp(6px, 1.8vw, 10px) clamp(10px, 2.5vw, 14px);
-    margin-bottom: clamp(6px, 1.5vw, 9px);
-    font-size: var(--fs-body);
+    padding: 8px 14px;
+    margin-bottom: 8px;
+    font-size: 0.95em;
     font-weight: 700;
     text-align: left;
     box-shadow: 2px 2px 0 #0000CD;
   }
-  #s9 .point .tico { font-size: clamp(1.1em, 3vw, 1.5em); flex-shrink: 0; }
-  #s9 .gifs-row {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: clamp(8px, 2.5vw, 16px);
-    margin-top: clamp(10px, 2.5vw, 14px);
-    font-size: clamp(1.4em, 5vw, 2.2em);
-  }
+  #slide-9 .point .ico { font-size: 1.5em; flex-shrink: 0; }
+  #slide-9 .gifs-row { font-size: 2.2em; margin-top: 14px; display: flex; gap: 16px; justify-content: center; }
 
 </style>
 </head>
@@ -495,336 +616,383 @@
 <div id="slideshow">
 
   <!-- ======== SLIDE 1 — CAPA ======== -->
-  <div class="slide active" id="s1">
-    <div class="rainbow-bar"></div>
-    <div class="stars-bg" id="stars1"></div>
-    <div class="center-area">
-      <div class="main-box">
-        <div class="materia-tag">✨ Tecnologias Digitais Aplicadas ao Ensino ✨</div>
-        <h1 class="t-title">
-          <span class="rainbow-text">Realidade Aumentada</span><br>
-          <span style="font-size:0.6em;color:#888">&</span><br>
-          <span class="rainbow-text">Internet das Coisas</span>
-        </h1>
-        <p class="t-body" style="color:#555;margin-top:8px"><strong>(AR & IoT)</strong> — Recursos Tecnológicos no Ensino de Química</p>
-        <div class="gifs-row">
-          <span class="bounce">🤖</span>
-          <span class="spin">⭐</span>
-          <span class="bounce" style="animation-delay:.3s">🔬</span>
-          <span class="spin" style="animation-delay:.5s">💫</span>
-          <span class="bounce" style="animation-delay:.6s">📱</span>
-          <span class="spin" style="animation-delay:.2s">🌟</span>
-          <span class="bounce" style="animation-delay:.9s">🧪</span>
-        </div>
+  <div class="slide active" id="slide-1">
+    <div class="top-bar"></div>
+    <div class="stars-container" id="stars1"></div>
+    <div class="main-box">
+      <div class="materia-tag">✨ Tecnologias Digitais Aplicadas ao Ensino ✨</div>
+      <h1>
+        <span class="rainbow">Realidade Aumentada</span><br>
+        <span style="font-size:0.6em;color:#555">&</span><br>
+        <span class="rainbow">Internet das Coisas</span>
+      </h1>
+      <p class="subtitle"><strong>(AR & IoT)</strong> — Recursos Tecnológicos no Ensino de Química</p>
+      <div class="gifs-row">
+        <span class="bounce">🤖</span>
+        <span class="spin">⭐</span>
+        <span class="bounce" style="animation-delay:0.3s">🔬</span>
+        <span class="spin" style="animation-delay:0.5s">💫</span>
+        <span class="bounce" style="animation-delay:0.6s">📱</span>
+        <span class="spin" style="animation-delay:0.2s">🌟</span>
+        <span class="bounce" style="animation-delay:0.9s">🧪</span>
       </div>
     </div>
+    <div class="bottom-bar"></div>
     <div class="ticker-wrap">
-      <div class="ticker">⭐ Bem-vindos! ⭐ &nbsp; 🚀 AR & IoT na Educação 🚀 &nbsp; ✨ NTIC aplicadas à Educação ✨ &nbsp; 🤖 Tecnologia do Futuro na Sala de Aula! 🤖 &nbsp; 💡 Deslize para avançar! 💡 &nbsp;</div>
+      <div class="ticker">
+        ⭐ Bem-vindos! ⭐ &nbsp;&nbsp; 🚀 AR & IoT na Educação 🚀 &nbsp;&nbsp; ✨ Recursos Tecnológicos no Ensino de Química ✨ &nbsp;&nbsp; 🤖 Tecnologia do Futuro na Sala de Aula! 🤖 &nbsp;&nbsp; 💡 NTIC aplicadas à Educação 💡 &nbsp;&nbsp; 🌟 Clique para avançar! 🌟 &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 2 — ROTEIRO ======== -->
-  <div class="slide" id="s2">
+  <div class="slide" id="slide-2">
     <div class="slide-header">
-      <span class="bounce">📋</span> R O T E I R O <span class="bounce" style="animation-delay:.5s">📋</span>
+      <span class="bounce">📋</span> &nbsp; R O T E I R O &nbsp; <span class="bounce" style="animation-delay:0.5s">📋</span>
     </div>
-    <div class="slide-body">
-      <div class="grid-2">
-        <div class="topic-card" style="border-left-color:#0000CD">
-          <div class="num-badge" style="background:#0000CD">01</div>
-          <span class="topic-icon">🥽</span>
-          <span>O que é Realidade Aumentada?</span>
-        </div>
-        <div class="topic-card" style="border-left-color:#6A1B9A">
-          <div class="num-badge" style="background:#6A1B9A">04</div>
-          <span class="topic-icon">🏫</span>
-          <span>IoT na Educação</span>
-        </div>
-        <div class="topic-card" style="border-left-color:#8B00FF">
-          <div class="num-badge" style="background:#8B00FF">02</div>
-          <span class="topic-icon">⚗️</span>
-          <span>AR no Ensino de Química</span>
-        </div>
-        <div class="topic-card" style="border-left-color:#FF8C00">
-          <div class="num-badge" style="background:#FF8C00">05</div>
-          <span class="topic-icon">⚖️</span>
-          <span>Benefícios & Desafios</span>
-        </div>
-        <div class="topic-card" style="border-left-color:#B71C1C">
-          <div class="num-badge" style="background:#B71C1C">03</div>
-          <span class="topic-icon">📡</span>
-          <span>O que é Internet das Coisas?</span>
-        </div>
-        <div class="topic-card" style="border-left-color:#1B5E20">
-          <div class="num-badge" style="background:#1B5E20">06</div>
-          <span class="topic-icon">📚</span>
-          <span>Conexão com a Ementa</span>
-        </div>
+    <div class="grid">
+      <div class="topic-card" style="border-left-color:#0000CD">
+        <div class="num-badge" style="background:#0000CD">01</div>
+        <span class="topic-icon">🥽</span>
+        <span>O que é Realidade Aumentada?</span>
+      </div>
+      <div class="topic-card" style="border-left-color:#6A1B9A">
+        <div class="num-badge" style="background:#6A1B9A">04</div>
+        <span class="topic-icon">🏫</span>
+        <span>IoT na Educação</span>
+      </div>
+      <div class="topic-card" style="border-left-color:#8B00FF">
+        <div class="num-badge" style="background:#8B00FF">02</div>
+        <span class="topic-icon">⚗️</span>
+        <span>AR no Ensino de Química</span>
+      </div>
+      <div class="topic-card" style="border-left-color:#FF8C00">
+        <div class="num-badge" style="background:#FF8C00">05</div>
+        <span class="topic-icon">⚖️</span>
+        <span>Benefícios & Desafios</span>
+      </div>
+      <div class="topic-card" style="border-left-color:#B71C1C">
+        <div class="num-badge" style="background:#B71C1C">03</div>
+        <span class="topic-icon">📡</span>
+        <span>O que é Internet das Coisas?</span>
+      </div>
+      <div class="topic-card" style="border-left-color:#1B5E20">
+        <div class="num-badge" style="background:#1B5E20">06</div>
+        <span class="topic-icon">📚</span>
+        <span>Conexão com a Ementa</span>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">⭐ Deslize para navegar! &nbsp; 🚀 6 tópicos • 9 slides • muito aprendizado! 🚀 &nbsp;</div>
+      <div class="ticker">
+        ⭐ Navegue com as setas ← → ou clique nos botões abaixo! ⭐ &nbsp;&nbsp; 🚀 6 tópicos • 9 slides • muito aprendizado! 🚀 &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 3 — O QUE É AR ======== -->
-  <div class="slide" id="s3">
-    <div class="slide-header" style="background:linear-gradient(90deg,#0000CD,#1565C0)">
-      <span class="bounce">🥽</span> 01 — O QUE É REALIDADE AUMENTADA?
+  <div class="slide" id="slide-3">
+    <div class="slide-header">
+      <span class="bounce">🥽</span> &nbsp; 01 — O QUE É REALIDADE AUMENTADA?
     </div>
-    <div class="slide-body">
-      <div class="card-left-border t-body" style="border-left-color:#0000CD;box-shadow:3px 3px 0 #0000CD">
-        <strong style="color:#0000CD">📖 Definição:</strong> Interface virtual em <strong>2D ou 3D</strong> que sobrepõe informações digitais ao <strong>mundo real em tempo real</strong>. O espectador mantém a percepção do ambiente físico — a imersão no virtual não é total.
-      </div>
-      <div class="card t-body" style="border-color:#FF8C00;box-shadow:3px 3px 0 #FF8C00;background:#FFF9C4">
-        <strong style="color:#FF8C00" class="t-head">⚙️ Como funciona?</strong>
-        <div style="margin-top:8px">
+    <div class="content">
+      <div class="left-col">
+        <div class="def-box">
+          <strong>📖 Definição:</strong><br>
+          Interface virtual em <strong>2D ou 3D</strong> que sobrepõe informações digitais ao <strong>mundo real em tempo real</strong>. O espectador mantém a percepção do ambiente físico — a imersão no virtual não é total.
+        </div>
+        <div class="steps-box">
+          <h3>⚙️ Como funciona?</h3>
           <div class="step"><div class="step-num">1</div> 📷 Câmera capta o ambiente real</div>
           <div class="step"><div class="step-num">2</div> 🔍 Software reconhece o marcador/QR Code</div>
           <div class="step"><div class="step-num">3</div> 🖥️ Objeto 3D é renderizado na tela</div>
           <div class="step"><div class="step-num">4</div> 🖐️ Aluno interage com o conteúdo</div>
         </div>
       </div>
-      <div class="mini-cards">
+      <div class="right-col">
         <div class="mini-card" style="border-color:#0000CD;box-shadow:3px 3px 0 #0000CD;color:#0000CD">
-          <span class="mico float">🌐</span>
-          <strong>Mundo Real</strong><br><small class="t-small">Vê o ambiente físico normalmente</small>
+          <span class="icon float">🌐</span>
+          <strong>Mundo Real</strong><br>
+          <small style="color:#555">O aluno vê o ambiente físico normalmente</small>
         </div>
         <div class="mini-card" style="border-color:#8B00FF;box-shadow:3px 3px 0 #8B00FF;color:#8B00FF">
-          <span class="mico float" style="animation-delay:.5s">📱</span>
-          <strong>Marcadores</strong><br><small class="t-small">QR Codes ativam objetos 3D</small>
+          <span class="icon float" style="animation-delay:0.5s">📱</span>
+          <strong>Marcadores</strong><br>
+          <small style="color:#555">QR Codes ativam objetos 3D na tela</small>
         </div>
         <div class="mini-card" style="border-color:#00AA00;box-shadow:3px 3px 0 #00AA00;color:#00AA00">
-          <span class="mico float" style="animation-delay:1s">✨</span>
-          <strong>Fusão!</strong><br><small class="t-small">Virtual se sobrepõe ao real</small>
+          <span class="icon float" style="animation-delay:1s">✨</span>
+          <strong>Fusão!</strong><br>
+          <small style="color:#555">Virtual se sobrepõe ao real em tempo real</small>
         </div>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">🥽 AR = Realidade Aumentada! &nbsp; ⭐ Não é VR — você ainda vê o mundo real! ⭐ &nbsp; 📱 Funciona no celular! &nbsp;</div>
+      <div class="ticker">
+        🥽 AR = Realidade Aumentada! &nbsp;&nbsp; ⭐ Não é Realidade Virtual — você ainda vê o mundo real! ⭐ &nbsp;&nbsp; 📱 Funciona no celular! Simples assim! 📱 &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 4 — AR NA QUÍMICA ======== -->
-  <div class="slide" id="s4">
-    <div class="slide-header" style="background:linear-gradient(90deg,#6A1B9A,#8B00FF)">
-      <span class="bounce">⚗️</span> 02 — AR NO ENSINO DE QUÍMICA
+  <div class="slide" id="slide-4">
+    <div class="slide-header">
+      <span class="bounce">⚗️</span> &nbsp; 02 — AR NO ENSINO DE QUÍMICA
     </div>
-    <div class="slide-body">
-      <div class="highlight-box" style="background:#FFF9C4;border:2px solid #FF8C00;border-left:7px solid #FF8C00">
-        <span class="hico">⚠️</span>
-        <div class="t-body"><strong>PROBLEMA:</strong> A Química exige alto nível de abstração — moléculas, ligações e geometria molecular são difíceis de visualizar em livros e quadros 2D.</div>
+    <div class="content">
+      <div class="problem-box">
+        <span style="font-size:1.8em">⚠️</span>
+        <div><strong>PROBLEMA:</strong> A Química exige alto nível de abstração — moléculas, ligações e geometria molecular são difíceis de visualizar em livros e quadros 2D.</div>
       </div>
-      <div class="grid-2">
-        <div class="app-card" style="border-color:#8B00FF;box-shadow:3px 3px 0 #8B00FF">
-          <span class="aico float">🧊</span>
-          <div><p class="t-head" style="color:#8B00FF">Merge Cube</p><p class="t-small">Visualização 3D de moléculas segurando o cubo físico. Aluno manipula estruturas com as mãos!</p></div>
+      <div class="apps-grid">
+        <div class="app-card" style="border-color:#8B00FF;box-shadow:4px 4px 0 #8B00FF">
+          <span class="app-icon float">🧊</span>
+          <div>
+            <h4 style="color:#8B00FF">Merge Cube</h4>
+            <p>Visualização 3D de moléculas segurando o cubo físico. Aluno manipula estruturas com as mãos!</p>
+          </div>
         </div>
-        <div class="app-card" style="border-color:#0000CD;box-shadow:3px 3px 0 #0000CD">
-          <span class="aico float" style="animation-delay:.5s">🇧🇷</span>
-          <div><p class="t-head" style="color:#0000CD">QuimicAR</p><p class="t-small">App brasileiro desenvolvido para estruturas químicas no Ensino Médio!</p></div>
+        <div class="app-card" style="border-color:#0000CD;box-shadow:4px 4px 0 #0000CD">
+          <span class="app-icon float" style="animation-delay:0.5s">🇧🇷</span>
+          <div>
+            <h4 style="color:#0000CD">QuimicAR</h4>
+            <p>App brasileiro desenvolvido para estruturas químicas no Ensino Médio!</p>
+          </div>
         </div>
-        <div class="app-card" style="border-color:#00AA00;box-shadow:3px 3px 0 #00AA00">
-          <span class="aico float" style="animation-delay:.8s">📐</span>
-          <div><p class="t-head" style="color:#00AA00">GeoGebra AR</p><p class="t-small">Geometria molecular e modelos espaciais interativos em 3D.</p></div>
+        <div class="app-card" style="border-color:#00AA00;box-shadow:4px 4px 0 #00AA00">
+          <span class="app-icon float" style="animation-delay:0.8s">📐</span>
+          <div>
+            <h4 style="color:#00AA00">GeoGebra AR</h4>
+            <p>Geometria molecular e modelos espaciais interativos em 3D.</p>
+          </div>
         </div>
-        <div class="app-card" style="border-color:#B71C1C;box-shadow:3px 3px 0 #B71C1C">
-          <span class="aico float" style="animation-delay:.3s">🔬</span>
-          <div><p class="t-head" style="color:#B71C1C">ChemTube3D</p><p class="t-small">Reações, orbitais e mecanismos químicos visualizados em 3D!</p></div>
+        <div class="app-card" style="border-color:#B71C1C;box-shadow:4px 4px 0 #B71C1C">
+          <span class="app-icon float" style="animation-delay:0.3s">🔬</span>
+          <div>
+            <h4 style="color:#B71C1C">ChemTube3D</h4>
+            <p>Reações, orbitais e mecanismos químicos visualizados em 3D!</p>
+          </div>
         </div>
       </div>
-      <div class="highlight-box" style="background:#E8F5E9;border:2px solid #00AA00;border-left:7px solid #00AA00">
-        <span class="hico">✅</span>
-        <div class="t-body"><strong>Resultados:</strong> Maior motivação · Melhor visualização espacial · Mais engajamento · Compreensão profunda de conceitos abstratos</div>
+      <div class="result-box">
+        <span style="font-size:1.8em">✅</span>
+        <span><strong>Resultados:</strong> Maior motivação · Melhor visualização espacial · Mais engajamento · Compreensão profunda de conceitos abstratos</span>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">⚗️ AR torna moléculas visíveis em 3D! &nbsp; 🔬 Química nunca foi tão visual! &nbsp; ⭐ Do livro para a tela do celular! ⭐ &nbsp;</div>
+      <div class="ticker">
+        ⚗️ AR torna moléculas visíveis em 3D! &nbsp;&nbsp; 🔬 Química nunca foi tão visual! 🔬 &nbsp;&nbsp; ⭐ Do livro para a tela do celular! ⭐ &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 5 — O QUE É IoT ======== -->
-  <div class="slide" id="s5">
-    <div class="slide-header" style="background:linear-gradient(90deg,#B71C1C,#D32F2F)">
-      <span class="bounce">📡</span> 03 — O QUE É INTERNET DAS COISAS?
+  <div class="slide" id="slide-5">
+    <div class="slide-header">
+      <span class="bounce">📡</span> &nbsp; 03 — O QUE É INTERNET DAS COISAS?
     </div>
-    <div class="slide-body">
-      <div class="card-left-border t-body" style="border-left-color:#B71C1C;box-shadow:3px 3px 0 #B71C1C">
-        <strong style="color:#B71C1C">📖 Definição:</strong> Infraestrutura de <strong>objetos físicos conectados à internet</strong> que coletam, processam e compartilham dados. Sensores, dispositivos e sistemas interagem de forma autônoma e inteligente.
+    <div class="content">
+      <div class="def-box">
+        <strong>📖 Definição:</strong> Infraestrutura de <strong>objetos físicos conectados à internet</strong> que coletam, processam e compartilham dados. Sensores, dispositivos e sistemas interagem de forma autônoma e inteligente.
       </div>
-      <div class="highlight-box" style="background:#FFF9C4;border:2px dashed #FF8C00">
-        <span class="hico">🔖</span>
-        <div class="t-body"><strong>Origem:</strong> O termo <em>Internet of Things</em> foi criado por <strong>Kevin Ashton em 1999</strong>, ao imaginar objetos do mundo físico conectados à internet de forma independente.</div>
+      <div class="origin-box">
+        <span style="font-size:1.6em">🔖</span>
+        <span><strong>Origem:</strong> O termo <em>Internet of Things</em> foi criado por <strong>Kevin Ashton em 1999</strong>, ao imaginar objetos do mundo físico conectados à internet de forma independente.</span>
       </div>
-      <div class="grid-4">
-        <div class="pillar" style="border-color:#B71C1C;box-shadow:3px 3px 0 #B71C1C">
-          <span class="pico bounce">📡</span>
-          <p class="t-head" style="color:#B71C1C">Sensores</p>
-          <p class="t-small">Captam dados do ambiente em tempo real</p>
+      <div class="pillars">
+        <div class="pillar" style="border-color:#B71C1C;box-shadow:4px 4px 0 #B71C1C">
+          <span class="icon bounce">📡</span>
+          <h4 style="color:#B71C1C">Sensores</h4>
+          <p>Captam dados do ambiente físico em tempo real</p>
         </div>
-        <div class="pillar" style="border-color:#0000CD;box-shadow:3px 3px 0 #0000CD">
-          <span class="pico bounce" style="animation-delay:.3s">🌐</span>
-          <p class="t-head" style="color:#0000CD">Conectividade</p>
-          <p class="t-small">Wi-Fi, Bluetooth, 5G conectam os dispositivos</p>
+        <div class="pillar" style="border-color:#0000CD;box-shadow:4px 4px 0 #0000CD">
+          <span class="icon bounce" style="animation-delay:0.3s">🌐</span>
+          <h4 style="color:#0000CD">Conectividade</h4>
+          <p>Wi-Fi, Bluetooth, 5G ligam os dispositivos</p>
         </div>
-        <div class="pillar" style="border-color:#00AA00;box-shadow:3px 3px 0 #00AA00">
-          <span class="pico bounce" style="animation-delay:.6s">⚙️</span>
-          <p class="t-head" style="color:#00AA00">Processamento</p>
-          <p class="t-small">Análise e decisão na nuvem ou local</p>
+        <div class="pillar" style="border-color:#00AA00;box-shadow:4px 4px 0 #00AA00">
+          <span class="icon bounce" style="animation-delay:0.6s">⚙️</span>
+          <h4 style="color:#00AA00">Processamento</h4>
+          <p>Análise e decisão na nuvem ou no próprio dispositivo</p>
         </div>
-        <div class="pillar" style="border-color:#FF8C00;box-shadow:3px 3px 0 #FF8C00">
-          <span class="pico bounce" style="animation-delay:.9s">🤖</span>
-          <p class="t-head" style="color:#FF8C00">Automação</p>
-          <p class="t-small">Ação automática sem intervenção humana</p>
+        <div class="pillar" style="border-color:#FF8C00;box-shadow:4px 4px 0 #FF8C00">
+          <span class="icon bounce" style="animation-delay:0.9s">🤖</span>
+          <h4 style="color:#FF8C00">Automação</h4>
+          <p>Ação automática sem intervenção humana</p>
         </div>
       </div>
-      <div class="card t-body" style="border-color:#ccc;text-align:center">
-        💡 <strong>Exemplos:</strong> Lâmpadas inteligentes · Termostatos · Smartwatches · Assistentes de voz · Carros conectados
+      <div class="examples-box">
+        <span style="font-size:1.5em">💡</span>
+        <span><strong>Exemplos:</strong> 💡 Lâmpadas inteligentes &nbsp;·&nbsp; 🌡️ Termostatos &nbsp;·&nbsp; 📷 Câmeras &nbsp;·&nbsp; ⌚ Smartwatches &nbsp;·&nbsp; 🔊 Assistentes de voz &nbsp;·&nbsp; 🚗 Carros conectados</span>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">📡 IoT = objetos que "pensam" e se comunicam! &nbsp; 🤖 Kevin Ashton criou o termo em 1999! &nbsp; 🌐 O mundo físico conectado! &nbsp;</div>
+      <div class="ticker">
+        📡 IoT = objetos que "pensam" e se comunicam! &nbsp;&nbsp; 🤖 Kevin Ashton criou o termo em 1999! 🔖 &nbsp;&nbsp; 🌐 O mundo físico conectado à internet! ⭐ &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 6 — IoT NA EDUCAÇÃO ======== -->
-  <div class="slide" id="s6">
-    <div class="slide-header" style="background:linear-gradient(90deg,#1B5E20,#2E7D32)">
-      <span class="bounce">🏫</span> 04 — IoT NA EDUCAÇÃO
+  <div class="slide" id="slide-6">
+    <div class="slide-header">
+      <span class="bounce">🏫</span> &nbsp; 04 — IoT NA EDUCAÇÃO
     </div>
-    <div class="slide-body">
-      <div class="app-card" style="border-color:#1B5E20;box-shadow:3px 3px 0 #1B5E20">
-        <span class="aico float">🏫</span>
-        <div><p class="t-head" style="color:#1B5E20">Sala de Aula Inteligente</p><p class="t-small">Sensores ajustam iluminação e temperatura automaticamente. Projetores e telas interativas conectados tornam as aulas mais dinâmicas.</p></div>
+    <div class="content">
+      <div class="app-card" style="border-color:#1B5E20;box-shadow:4px 4px 0 #1B5E20">
+        <span class="icon float">🏫</span>
+        <div>
+          <h4 style="color:#1B5E20">Sala de Aula Inteligente</h4>
+          <p>Sensores ajustam iluminação e temperatura automaticamente. Projetores e telas interativas conectados tornam as aulas mais dinâmicas.</p>
+        </div>
       </div>
-      <div class="app-card" style="border-color:#0000CD;box-shadow:3px 3px 0 #0000CD">
-        <span class="aico float" style="animation-delay:.4s">📊</span>
-        <div><p class="t-head" style="color:#0000CD">Monitoramento de Aprendizagem</p><p class="t-small">Dispositivos coletam dados sobre atenção e engajamento dos alunos em tempo real, permitindo ajuste imediato da metodologia.</p></div>
+      <div class="app-card" style="border-color:#0000CD;box-shadow:4px 4px 0 #0000CD">
+        <span class="icon float" style="animation-delay:0.4s">📊</span>
+        <div>
+          <h4 style="color:#0000CD">Monitoramento de Aprendizagem</h4>
+          <p>Dispositivos coletam dados sobre atenção e engajamento dos alunos em tempo real, permitindo ajuste imediato da metodologia.</p>
+        </div>
       </div>
-      <div class="app-card" style="border-color:#8B00FF;box-shadow:3px 3px 0 #8B00FF">
-        <span class="aico float" style="animation-delay:.8s">♿</span>
-        <div><p class="t-head" style="color:#8B00FF">Ensino Inclusivo (TEA)</p><p class="t-small">Protótipos com <strong>Arduino + RFID</strong> como recurso pedagógico para alunos com Transtorno do Espectro Autista, promovendo interação e inclusão.</p></div>
+      <div class="app-card" style="border-color:#8B00FF;box-shadow:4px 4px 0 #8B00FF">
+        <span class="icon float" style="animation-delay:0.8s">♿</span>
+        <div>
+          <h4 style="color:#8B00FF">Ensino Inclusivo (TEA)</h4>
+          <p>Protótipos com <strong>Arduino + RFID</strong> usados como recurso pedagógico para alunos com Transtorno do Espectro Autista, promovendo interação e inclusão.</p>
+        </div>
       </div>
-      <div class="app-card" style="border-color:#FF8C00;box-shadow:3px 3px 0 #FF8C00">
-        <span class="aico float" style="animation-delay:1.2s">🔧</span>
-        <div><p class="t-head" style="color:#FF8C00">Projetos Práticos com Arduino</p><p class="t-small">Alunos criam dispositivos IoT com <strong>Arduino e Tinkercad</strong>, desenvolvendo habilidades técnicas e despertando interesse por carreiras tecnológicas.</p></div>
+      <div class="app-card" style="border-color:#FF8C00;box-shadow:4px 4px 0 #FF8C00">
+        <span class="icon float" style="animation-delay:1.2s">🔧</span>
+        <div>
+          <h4 style="color:#FF8C00">Projetos Práticos com Arduino</h4>
+          <p>Alunos criam dispositivos IoT com <strong>Arduino e Tinkercad</strong>, desenvolvendo habilidades técnicas e despertando interesse por carreiras tecnológicas.</p>
+        </div>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">🏫 A escola do futuro já existe! &nbsp; 🤖 Arduino + RFID para inclusão! ♿ &nbsp; 📊 Dados em tempo real! &nbsp; ⭐ IoT transforma o aprendizado! &nbsp;</div>
+      <div class="ticker">
+        🏫 A escola do futuro já existe! &nbsp;&nbsp; 🤖 Arduino + RFID para inclusão! ♿ &nbsp;&nbsp; 📊 Dados em tempo real para o professor! &nbsp;&nbsp; ⭐ IoT transforma o aprendizado! ⭐ &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 7 — BENEFÍCIOS & DESAFIOS ======== -->
-  <div class="slide" id="s7">
-    <div class="slide-header" style="background:linear-gradient(90deg,#E65100,#FF8C00)">
-      <span class="bounce">⚖️</span> 05 — BENEFÍCIOS & DESAFIOS
+  <div class="slide" id="slide-7">
+    <div class="slide-header">
+      <span class="bounce">⚖️</span> &nbsp; 05 — BENEFÍCIOS & DESAFIOS
     </div>
-    <div class="slide-body" style="padding-left:0;padding-right:0;padding-top:0">
-      <div class="two-col" style="flex:1">
-        <div class="col">
-          <div class="col-header" style="background:linear-gradient(90deg,#1B5E20,#2E7D32)">✅ BENEFÍCIOS</div>
-          <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">🎯</span> Maior engajamento e motivação</div>
-          <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">🔬</span> Visualização de conceitos em 3D</div>
-          <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">🎓</span> Aprendizagem personalizada</div>
-          <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">📊</span> Dados em tempo real</div>
-          <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">♿</span> Apoio ao ensino inclusivo</div>
-          <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">💼</span> Preparo para o mercado digital</div>
-        </div>
-        <div class="col" style="border-left:2px dashed #ccc">
-          <div class="col-header" style="background:linear-gradient(90deg,#B71C1C,#D32F2F)">⚠️ DESAFIOS</div>
-          <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">💰</span> Custo elevado nas escolas públicas</div>
-          <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🏗️</span> Infraestrutura insuficiente</div>
-          <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🌍</span> Apps majoritariamente em inglês</div>
-          <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🔒</span> Privacidade e segurança de dados</div>
-          <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">👩‍🏫</span> Capacitação docente contínua</div>
-          <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🎭</span> Risco: tecnologia sem propósito</div>
-        </div>
+    <div class="content">
+      <div class="col">
+        <div class="col-header" style="background:linear-gradient(90deg,#1B5E20,#2E7D32)">✅ BENEFÍCIOS</div>
+        <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">🎯</span> Maior engajamento e motivação dos alunos</div>
+        <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">🔬</span> Visualização de conceitos abstratos em 3D</div>
+        <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">🎓</span> Aprendizagem personalizada e adaptativa</div>
+        <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">📊</span> Dados em tempo real para ajuste pedagógico</div>
+        <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">♿</span> Apoio ao ensino inclusivo (tecnologia assistiva)</div>
+        <div class="item" style="border-color:#00AA00;box-shadow:2px 2px 0 #00AA00"><span class="ico">💼</span> Preparo para o mercado de trabalho digital</div>
+      </div>
+      <div class="col" style="border-left:3px dashed #ccc">
+        <div class="col-header" style="background:linear-gradient(90deg,#B71C1C,#D32F2F)">⚠️ DESAFIOS</div>
+        <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">💰</span> Custo elevado nas escolas públicas</div>
+        <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🏗️</span> Infraestrutura tecnológica insuficiente</div>
+        <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🌍</span> Apps disponíveis majoritariamente em inglês</div>
+        <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🔒</span> Privacidade e segurança de dados</div>
+        <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">👩‍🏫</span> Capacitação docente contínua necessária</div>
+        <div class="item" style="border-color:#B71C1C;box-shadow:2px 2px 0 #B71C1C"><span class="ico">🎭</span> Risco: tecnologia sem propósito pedagógico</div>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">✅ Benefícios são muitos! &nbsp; ⚠️ Mas os desafios precisamos discutir! &nbsp; 💡 Tecnologia SEM propósito pedagógico é problemática! &nbsp;</div>
+      <div class="ticker">
+        ✅ Benefícios são muitos! &nbsp;&nbsp; ⚠️ Mas os desafios existem e precisamos discuti-los! &nbsp;&nbsp; 💡 Tecnologia SEM propósito pedagógico pode prejudicar o aprendizado! &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 8 — CONEXÃO COM A EMENTA ======== -->
-  <div class="slide" id="s8">
-    <div class="slide-header" style="background:linear-gradient(90deg,#283593,#3949AB);color:var(--yellow)">
-      <span class="bounce">📚</span> 06 — CONEXÃO COM A EMENTA
+  <div class="slide" id="slide-8">
+    <div class="slide-header">
+      <span class="bounce">📚</span> &nbsp; 06 — CONEXÃO COM A EMENTA DA DISCIPLINA
     </div>
-    <div class="slide-body">
+    <div class="content">
       <div class="link-row" style="border-left-color:#0000CD">
-        <span class="lico">🔬</span>
-        <div><strong class="t-body" style="color:#0000CD">Recursos Tecnológicos no Ensino de Química</strong><br><span class="t-small">AR → Aplicativos para visualização 3D de moléculas, ligações e geometria molecular</span></div>
+        <span class="icon">🔬</span>
+        <div>
+          <strong style="color:#0000CD">Recursos Tecnológicos no Ensino de Química</strong>
+          <span>AR → Aplicativos para visualização 3D de moléculas, ligações e geometria molecular</span>
+        </div>
       </div>
       <div class="link-row" style="border-left-color:#8B00FF">
-        <span class="lico">📱</span>
-        <div><strong class="t-body" style="color:#8B00FF">m-learning (Aprendizagem Móvel)</strong><br><span class="t-small">AR roda em smartphones — exemplo direto de aprendizagem com dispositivos móveis</span></div>
+        <span class="icon">📱</span>
+        <div>
+          <strong style="color:#8B00FF">m-learning (Aprendizagem Móvel)</strong>
+          <span>AR roda em smartphones — exemplo direto de aprendizagem com dispositivos móveis</span>
+        </div>
       </div>
       <div class="link-row" style="border-left-color:#00AA00">
-        <span class="lico">🧪</span>
-        <div><strong class="t-body" style="color:#00AA00">Laboratórios Virtuais</strong><br><span class="t-small">AR permite simular experimentos e estruturas sem laboratório físico</span></div>
+        <span class="icon">🧪</span>
+        <div>
+          <strong style="color:#00AA00">Laboratórios Virtuais</strong>
+          <span>AR permite simular experimentos e estruturas sem laboratório físico</span>
+        </div>
       </div>
       <div class="link-row" style="border-left-color:#FF8C00">
-        <span class="lico">♿</span>
-        <div><strong class="t-body" style="color:#FF8C00">Tecnologias Assistivas e Ensino Inclusivo</strong><br><span class="t-small">IoT com Arduino e RFID como recurso pedagógico para alunos com TEA</span></div>
+        <span class="icon">♿</span>
+        <div>
+          <strong style="color:#FF8C00">Tecnologias Assistivas e Ensino Inclusivo</strong>
+          <span>IoT com Arduino e RFID como recurso pedagógico para alunos com TEA</span>
+        </div>
       </div>
       <div class="link-row" style="border-left-color:#B71C1C">
-        <span class="lico">🏫</span>
-        <div><strong class="t-body" style="color:#B71C1C">Ensino Híbrido e e-learning</strong><br><span class="t-small">IoT amplia as fronteiras da sala de aula conectando ambientes físico e digital</span></div>
+        <span class="icon">🏫</span>
+        <div>
+          <strong style="color:#B71C1C">Ensino Híbrido e e-learning</strong>
+          <span>IoT amplia as fronteiras da sala de aula conectando ambientes físico e digital</span>
+        </div>
       </div>
     </div>
     <div class="ticker-wrap">
-      <div class="ticker">📚 AR e IoT cabem PERFEITAMENTE na ementa! &nbsp; ✅ Laboratórios virtuais · m-learning · Inclusão · Ensino híbrido! &nbsp;</div>
+      <div class="ticker">
+        📚 AR e IoT cabem PERFEITAMENTE na ementa! &nbsp;&nbsp; ✅ Laboratórios virtuais · m-learning · Ensino inclusivo · Ensino híbrido! &nbsp;&nbsp; ⭐ Tudo conectado! ⭐ &nbsp;&nbsp;
+      </div>
     </div>
-    <div class="rainbow-bar"></div>
   </div>
 
   <!-- ======== SLIDE 9 — CONCLUSÃO ======== -->
-  <div class="slide" id="s9">
-    <div class="rainbow-bar"></div>
-    <div class="stars-bg" id="stars9"></div>
-    <div class="center-area">
-      <div class="main-box">
-        <h2 class="t-title rainbow-text" style="margin-bottom:clamp(10px,2.5vw,18px)">🎉 CONCLUSÃO! 🎉</h2>
-        <div class="point"><span class="tico">🚀</span> AR e IoT são NTIC com enorme potencial no ensino de Ciências e Química</div>
-        <div class="point"><span class="tico">🔬</span> Transformam conceitos abstratos em experiências visuais, interativas e concretas</div>
-        <div class="point"><span class="tico">🌐</span> Conectam o ensino à Web 3.0, ao m-learning e ao ensino híbrido</div>
-        <div class="point"><span class="tico">⚠️</span> Demandam infraestrutura, capacitação docente e propósito pedagógico claro</div>
-        <div class="point"><span class="tico">👩‍🏫</span> O professor continua sendo o mediador essencial do processo de aprendizagem</div>
-        <div class="gifs-row">
-          <span class="bounce">🎊</span><span class="spin">⭐</span>
-          <span class="bounce" style="animation-delay:.2s">🏆</span>
-          <span class="spin" style="animation-delay:.4s">💫</span>
-          <span class="bounce" style="animation-delay:.6s">🎉</span>
-          <span class="spin" style="animation-delay:.8s">🌟</span>
-        </div>
-        <p class="t-small blink" style="margin-top:10px;color:#888">✨ Obrigado(a)! Dúvidas? ✨</p>
+  <div class="slide" id="slide-9">
+    <div class="top-bar"></div>
+    <div class="stars-container" id="stars9"></div>
+    <div class="main-box">
+      <h2>🎉 CONCLUSÃO! 🎉</h2>
+      <div class="point"><span class="ico">🚀</span> AR e IoT são NTIC com enorme potencial no ensino de Ciências e Química</div>
+      <div class="point"><span class="ico">🔬</span> Transformam conceitos abstratos em experiências visuais, interativas e concretas</div>
+      <div class="point"><span class="ico">🌐</span> Conectam o ensino à Web 3.0, ao m-learning e ao ensino híbrido</div>
+      <div class="point"><span class="ico">⚠️</span> Demandam infraestrutura, capacitação docente e propósito pedagógico claro</div>
+      <div class="point"><span class="ico">👩‍🏫</span> O professor continua sendo o mediador essencial do processo de aprendizagem</div>
+      <div class="gifs-row">
+        <span class="bounce">🎊</span>
+        <span class="spin">⭐</span>
+        <span class="bounce" style="animation-delay:0.2s">🏆</span>
+        <span class="spin" style="animation-delay:0.4s">💫</span>
+        <span class="bounce" style="animation-delay:0.6s">🎉</span>
+        <span class="spin" style="animation-delay:0.8s">🌟</span>
+      </div>
+      <p style="margin-top:12px;font-size:0.9em;color:#888" class="blink">✨ Obrigado(a)! Dúvidas? ✨</p>
+    </div>
+    <div class="bottom-bar"></div>
+    <div class="ticker-wrap">
+      <div class="ticker">
+        🎉 Obrigado(a)! 🎉 &nbsp;&nbsp; ⭐ AR + IoT = O Futuro da Educação! ⭐ &nbsp;&nbsp; 🚀 Tecnologia a serviço do aprendizado! 🚀 &nbsp;&nbsp; 💡 Dúvidas? Perguntas? 💡 &nbsp;&nbsp;
       </div>
     </div>
-    <div class="ticker-wrap">
-      <div class="ticker">🎉 Obrigado(a)! 🎉 &nbsp; ⭐ AR + IoT = O Futuro da Educação! ⭐ &nbsp; 🚀 Tecnologia a serviço do aprendizado! 🚀 &nbsp;</div>
-    </div>
-    <div class="rainbow-bar"></div>
   </div>
 
 </div><!-- #slideshow -->
 
-<!-- Navigation bar -->
-<div class="nav-bar">
-  <button class="nav-btn" id="btn-prev">◀ ANTERIOR</button>
-  <div id="slide-counter">1 / 9</div>
-  <button class="nav-btn" id="btn-next">PRÓXIMO ▶</button>
-</div>
+<!-- Navigation -->
+<button class="nav-btn" id="btn-prev">◀ ANTERIOR</button>
+<div id="slide-counter">1 / 9</div>
+<button class="nav-btn" id="btn-next">PRÓXIMO ▶</button>
 
 <script>
+  // ===== SLIDE NAVIGATION =====
   const slides = document.querySelectorAll('.slide');
   let current = 0;
 
@@ -833,70 +1001,37 @@
     current = (n + slides.length) % slides.length;
     slides[current].classList.add('active');
     document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + slides.length;
-    // Scroll content to top on slide change
-    const body = slides[current].querySelector('.slide-body');
-    if (body) body.scrollTop = 0;
   }
 
   document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
   document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
 
-  // Keyboard
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
     if (e.key === 'ArrowLeft') goTo(current - 1);
   });
 
-  // ===== SWIPE TOUCH SUPPORT =====
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let isDragging = false;
-
-  document.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-    isDragging = false;
-  }, { passive: true });
-
-  document.addEventListener('touchmove', e => {
-    const dx = Math.abs(e.touches[0].clientX - touchStartX);
-    const dy = Math.abs(e.touches[0].clientY - touchStartY);
-    if (dx > dy && dx > 8) isDragging = true;
-  }, { passive: true });
-
-  document.addEventListener('touchend', e => {
-    if (!isDragging) return;
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
-    // Only swipe if horizontal movement dominates
-    if (Math.abs(dx) > 50 && Math.abs(dx) > dy * 1.5) {
-      if (dx < 0) goTo(current + 1); // swipe left = next
-      else         goTo(current - 1); // swipe right = prev
-    }
-  }, { passive: true });
-
-  // ===== FLOATING STARS =====
-  function createStars(id, count) {
-    const c = document.getElementById(id);
-    if (!c) return;
-    const emojis = ['⭐','💫','✨','🌟','⚡','💥'];
+  // ===== FLOATING STARS DECORATION =====
+  function createStars(containerId, count) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const emojis = ['⭐','💫','✨','🌟','⚡','💥','🔥'];
     for (let i = 0; i < count; i++) {
-      const el = document.createElement('span');
-      el.className = 'star-item';
-      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      el.style.cssText = `
-        left:${Math.random()*92}%;
-        top:${Math.random()*85}%;
-        font-size:${0.8 + Math.random()*1.4}em;
-        animation-duration:${1.5 + Math.random()*2.5}s;
-        animation-delay:${Math.random()*2}s;
-        opacity:${0.4 + Math.random()*0.5};
-      `;
-      c.appendChild(el);
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      star.style.left = Math.random() * 95 + '%';
+      star.style.top  = Math.random() * 88 + '%';
+      star.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+      star.style.animationDelay    = (Math.random() * 2) + 's';
+      star.style.fontSize = (0.9 + Math.random() * 1.2) + 'em';
+      container.appendChild(star);
     }
   }
-  createStars('stars1', 16);
-  createStars('stars9', 16);
+
+  createStars('stars1', 18);
+  createStars('stars9', 18);
 </script>
+
 </body>
 </html>
